@@ -37,7 +37,7 @@ public class AuthingHandlerInterceptor implements HandlerInterceptor {
       throw new AuthingException("未登录", HttpStatus.FORBIDDEN);
     }
     try {
-      String s = token.split(".")[1];
+      String s = token.split("\\.")[1];
       byte[] decode = Base64.getDecoder().decode(s);
       JwtPayload jwtPayload = objectMapper.readValue(decode, JwtPayload.class);
       String userId = jwtPayload.getSub();
