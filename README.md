@@ -1,5 +1,5 @@
 # authing-spring-boot-starter
-## 添加依赖
+## 1 添加依赖
 
 在您的 Spring 项目中引入：
 
@@ -34,10 +34,9 @@
 ```
 
 
-
-## 配置
-
-在 `application.yml` 配置文件中添加您的用户池与应用的相关配置：
+## 2 配置
+### 2.1 配置用户池与应用
+这里以 `yml`格式为例。 在 `application.yml` 配置文件中添加您的用户池与应用的相关配置：
 
 ```yml
 authing:
@@ -57,9 +56,11 @@ authing:
 
 > 你可以在此[了解如何获取 UserPoolId](https://docs.authing.cn/v2/guides/faqs/get-userpool-id-and-secret.html), 在控制台的**应用**中查看自己的应用列表。
 
+### 2.2 配置授权规则
+#### 2.2.1 需要校验登录态
 
 
-## 管理授权规则
+默认情况下，所有资源都为受保护资源，需要特定用户拥有特定权限才可访问。
 
 参考这里[对用户进行权限管理](https://docs.authing.cn/v2/guides/access-control/) 创建相应的`资源`以及`授权`。
 
@@ -67,11 +68,20 @@ authing:
 
 ![](./img/ins.png)
 
+#### 2.2.2 不需要校验登录态
 
+如果您希望暴露某些资源，如注册页/ 登录页等，来允许未登录者访问，请将资源地址配置在 `application.yml`中：
+```yaml
+authing:
+  exclude-paths:
+    - /demo0/url0
+    - /demo1/url1
+```
+`authing.exclude-paths`: 不需要校验的 url 白名单列表。
 
-## 失败处理
+## 3 失败处理
 
-如果您希望全局地给验证失败的请求返回 HTTP 403 异常，可在您的全局异常处理器中添加以下内容：
+如果您希望全局地给验证失败的请求返回特定异常，如 HTTP 403 异常，可在您的全局异常处理器中添加以下内容：
 
 ```java
 @ControllerAdvice(basePackages = "YOUR-PACKAGE")
@@ -86,14 +96,19 @@ public class GlobalExceptionHandler {
 }
 ```
 
-## 开始使用
+## 4 开始使用
 
-进行功能测试：
+进行功能测试。
+### 4.1 受保护的资源
+对于受保护的资源：
 
 ```java
-@GetMapping("/test/resources")
-public ResponseVO getResource() {
+@RestController
+public class DemoController {
+  @GetMapping("/test/resources")
+  public ResponseVO getResource() {
     return ResponseVO.success().setMessage("some resource need authorization");
+  }
 }
 ```
 
@@ -132,4 +147,17 @@ Authorization: WRONG TOKEN
     "message":"wrong token"
 }
 ```
+### 4.2 不受保护的资源
 
+```http
+GET /product/attr/info/<attrId> HTTP/1.1
+Host: localhost:8080
+User-Agent: apifox/1.0.0 (https://www.apifox.cn)
+Authorization: NO TOKEN
+```
+```json
+{
+    "code":200,
+    "message":"ok"
+}
+```
