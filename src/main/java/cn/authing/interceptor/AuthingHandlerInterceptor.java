@@ -8,7 +8,6 @@ import cn.authing.exception.AuthingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,12 +30,9 @@ public class AuthingHandlerInterceptor implements HandlerInterceptor {
 
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-    String header = request.getHeader("Authorization");
-    String token = header.replace("Bearer ", "").replace("bearer ", "");
-    if (ObjectUtils.isEmpty(token)) {
-      throw new AuthingException("未登录", HttpStatus.FORBIDDEN);
-    }
     try {
+      String authorization = request.getHeader("Authorization");
+      String token = authorization.replace("Bear ","").replace("bearer ","");
       String s = token.split("\\.")[1];
       byte[] decode = Base64.getDecoder().decode(s);
       JwtPayload jwtPayload = objectMapper.readValue(decode, JwtPayload.class);
@@ -49,17 +45,17 @@ public class AuthingHandlerInterceptor implements HandlerInterceptor {
         .collect(Collectors.toList());
 
       String uri = request.getRequestURI();
-      for (String r : identifiers) {
-        if (uri.contains(r)) {
+      for (String identifier : identifiers) {
+        if(uri.contains(identifier)) {
           log.info("鉴权通过");
           return true;
         }
       }
-      log.info("无权限");
-      return false;
-
+      log.info("没有权限");
+      throw new AuthingException("Wrong Token",HttpStatus.FORBIDDEN);
     } catch (Exception e) {
-      throw new AuthingException("token 错误", HttpStatus.FORBIDDEN);
+      log.info("没有权限");
+      throw new AuthingException("Wrong Token",HttpStatus.FORBIDDEN);
     }
   }
 }
