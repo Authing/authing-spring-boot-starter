@@ -1,12 +1,12 @@
 
 authing:
   user-pool:
-    user-pool-id: 62fdba62ce9b88676861a14e
-    secret: e81f5c2b71e5c3429b33c30a837194a5
+    user-pool-id: YOUR USER POOL ID
+    secret: YOUR USER POOL SECRET
 
   app:
-    app-id: 62fdba62b0c42c5a0c4336b8
-    app-host: https://pikfffmdebgc-demo.authing.cn
+    app-id: YOUR APP ID
+    app-host: YOUR APP HOST
 
   exclude-paths:
     - /login
