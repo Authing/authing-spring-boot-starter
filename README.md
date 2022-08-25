@@ -1,5 +1,12 @@
 # authing-spring-boot-starter
+
+
+> Authing 快速实现任何 Web、App 和企业软件的身份认证和用户管理，为你的客户和员工提供完善的登录解决方案。
+> 本项目可以为您提供拦截校验 token 的功能。
+
 ## 1 添加依赖
+
+### 1.1 从中央仓库引入
 
 在您的 Spring 项目中引入：
 
@@ -7,11 +14,36 @@
 <dependency>
     <groupId>cn.authing</groupId>
     <artifact>authing-spring-boot-starter</artifact>
-    <version>{lastest-version}</version>
+    <version>{latest-version}</version>
 </dependency>
 ```
 
+### 1.2 以 jitpack 方式从 github 源码引入：
 
+添加 repository,
+
+```xml
+ <repositories>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
+  </repositories>
+```
+
+添加 dependency,
+
+```xml
+<dependency>
+  <groupId>com.github.Authing</groupId>
+  <artifactId>authing-spring-boot-starter</artifactId>
+  <version>{authing.version}</version>
+</dependency>
+```
+
+`authing.version` 为 github 最新 tag.
+
+以上两种引用方式二选一。
 
 > 由于 okhttp3 的版本冲突问题，请从您的 `spring-boot-starter-web`中排除 `okhttp`, 使用 `okhttp:4.8.0`版本。
 
@@ -36,6 +68,7 @@
 
 ## 2 配置
 ### 2.1 配置用户池与应用
+
 这里以 `yml`格式为例。 在 `application.yml` 配置文件中添加您的用户池与应用的相关配置：
 
 ```yml

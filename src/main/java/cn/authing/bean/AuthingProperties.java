@@ -20,7 +20,6 @@ public class AuthingProperties {
 
   @Data
   public static class UserPoolProperties{
-
     private String userPoolId;
     private String secret;
   }

@@ -29,6 +29,6 @@ public class AuthingAutoConfiguration implements WebMvcConfigurer {
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
     registry.addInterceptor(new AuthingHandlerInterceptor(managementClient(), authingProperties, objectMapper))
-      .addPathPatterns("/**").excludePathPatterns(authingProperties.getExcludePaths());;
+      .addPathPatterns("/**").excludePathPatterns(authingProperties.getExcludePaths());
   }
 }
